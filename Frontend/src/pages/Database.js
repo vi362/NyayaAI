@@ -13,20 +13,24 @@ const Database = () => {
 
   // Fetch data from the endpoint
   useEffect(() => {
-    fetch('https://sih-backend-881i.onrender.com/case_list/')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setCases(data.cases || []);
-      })
-      .catch((error) => {
-        console.error('Error fetching cases:', error);
-        setCases([]);
-      });
+    fetch("http://127.0.0.1:8000/query/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+        query: userInput
+     })
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+
+    setResponse(data.response || data.error);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
   }, []);
 
   useEffect(() => {
@@ -175,7 +179,7 @@ const Database = () => {
     }
   
     // Send the POST request with only the updated fields
-    fetch(`https://sih-backend-881i.onrender.com/case_update/${activeCase.id}/`, {
+    fetch(`http://127.0.0.1:8000/case_list/case_update/${activeCase.id}/`, {
       method: 'POST', // Use POST for updating
       headers: {
         'Content-Type': 'application/json', // Set content type to JSON

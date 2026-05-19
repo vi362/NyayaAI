@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.shortcuts import render, HttpResponse
 import os
 from dotenv import load_dotenv
@@ -14,8 +16,14 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import string
 from nltk.stem import PorterStemmer
+from home.gemini import generate_legal_response
+from decouple import config
+#load_dotenv()
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+env_path = BASE_DIR / ".env"
+load_dotenv(dotenv_path=env_path)
 
 # Create your views here.
 def home(request):
@@ -115,7 +123,22 @@ def encode(request):
                 else:
                     print(f"Section ID {i} not found in database.")
             #print(act_database)
-            return JsonResponse({"acts": act_database}, safe=False)
+            try:
+               ai_response = generate_legal_response(
+                    query,
+                    legal_sections
+               )
+
+               return JsonResponse({
+                    "response": ai_response
+                })
+
+            except Exception as e:
+                print("ERROR:", str(e))
+
+                return JsonResponse({
+                    "error": str(e)
+                }, status=500)
 
 
         except Exception as e:

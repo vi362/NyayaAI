@@ -20,7 +20,7 @@ const OriginalDocuments = () => {
       setPdfError(null);
 
       try {
-        const response = await axios.get('https://sih-backend-881i.onrender.com/pdfs/');
+        const response = await axios.get('http://127.0.0.1:8000/pdfs/');
         setPdfs(response.data); // Assuming the response contains the list of PDFs with metadata
         setFilteredPdfs(response.data); // Set initial filtered PDFs to all PDFs
       } catch (err) {
@@ -57,7 +57,7 @@ const OriginalDocuments = () => {
     try {
       // Fetch the PDF file URL from the server
       const response = await axios.get(
-        `https://sih-backend-881i.onrender.com/pdfs/${pdfId}/download/`,
+        `http://127.0.0.1:8000/pdfs/${pdfId}/download/`,
         { responseType: 'arraybuffer' } // Use 'arraybuffer' for binary data handling in React Native
       );
   

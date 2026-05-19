@@ -18,7 +18,7 @@ const Database = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('https://sih-backend-881i.onrender.com/case_list/');
+      const response = await fetch(''http://127.0.0.1:8000/case_list/'');
       const data = await response.json();
       setCases(data.cases || []);
     } catch (error) {

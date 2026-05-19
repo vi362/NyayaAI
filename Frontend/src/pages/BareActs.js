@@ -34,7 +34,7 @@ const BareActs = () => {
     const fetchLaws = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("https://sih-backend-881i.onrender.com/database/");
+        const response = await axios.get("http://127.0.0.1:8000/case_list/database/");
         const lawsData = response.data.data; // Adjust based on the exact structure of the response
   
         // Map through the laws to initialize showDescription
@@ -91,7 +91,7 @@ const BareActs = () => {
 
     try {
       const response = await axios.post(
-        "https://sih-backend-881i.onrender.com/search/",
+        "http://127.0.0.1:8000/search/",
         {
           query: searchQuery || "", // Send an empty string if searchQuery is not provided
           act: selectedActType,     // Always include `selectedActType`
@@ -119,7 +119,7 @@ const BareActs = () => {
 
       try {
         const response = await axios.get(
-          "https://sih-backend-881i.onrender.com/pdfs/"
+          "http://127.0.0.1:8000/pdfs/"
         );
         setPdfs(response.data); // Assuming the response contains the list of PDFs with metadata
         setFilteredPdfs(response.data); // Set initial filtered PDFs to all PDFs
@@ -158,7 +158,7 @@ const BareActs = () => {
     try {
       // Fetch the PDF file for download using the pdfId
       const response = await axios.get(
-        `https://sih-backend-881i.onrender.com/pdfs/${pdfId}/download/`,
+        `http://127.0.0.1:8000/pdfs/${pdfId}/download/`,
         { responseType: "blob" } // Ensure we get binary PDF data
       );
 
@@ -190,7 +190,7 @@ const BareActs = () => {
     try {
       // Fetch the PDF file for preview using the pdfId
       const response = await axios.get(
-        `https://sih-backend-881i.onrender.com/pdfs/${pdfId}/download/`,
+        `http://127.0.0.1:8000/pdfs/${pdfId}/download/`,
         { responseType: "blob" } // Ensure we get binary PDF data
       );
 
@@ -246,7 +246,7 @@ const BareActs = () => {
       // If act is selected and query is empty, set query as an empty string and search by act  
       if (!payload.query && payload.act) {
         const apiResponse = await axios.post(
-          "https://sih-backend-881i.onrender.com/search/",
+          "http://127.0.0.1:8000/search/",
           { query: '', act: payload.act }
         );
 
@@ -262,7 +262,7 @@ const BareActs = () => {
 
       // If both fields are filled, proceed with the search  
       const apiResponse = await axios.post(
-        "https://sih-backend-881i.onrender.com/search/",
+        "http://127.0.0.1:8000/search/",
         payload
       );
 
