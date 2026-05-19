@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "NyayaAI",
+    "slug": "NyayaAI",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nyayaai.nyayaai"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.nyayaai.nyayaai"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9189eb67-17e5-455c-b6fa-d4d3ae67a815"
+      }
+    },
+    "plugins": [
+      "expo-asset"
+    ]
+  }
+}
