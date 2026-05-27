@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Buffer } from 'buffer';
+const API_BASE = process.env.REACT_APP_API_URL;
 
 const OriginalDocuments = () => {
   const [pdfs, setPdfs] = useState([]);
@@ -20,7 +21,7 @@ const OriginalDocuments = () => {
       setPdfError(null);
 
       try {
-        const response = await axios.get('http://127.0.0.1:8000/pdfs/');
+        const response = await axios.get(`${API_BASE}/pdfs/`);
         setPdfs(response.data); // Assuming the response contains the list of PDFs with metadata
         setFilteredPdfs(response.data); // Set initial filtered PDFs to all PDFs
       } catch (err) {
@@ -57,7 +58,7 @@ const OriginalDocuments = () => {
     try {
       // Fetch the PDF file URL from the server
       const response = await axios.get(
-        `http://127.0.0.1:8000/pdfs/${pdfId}/download/`,
+        `${API_BASE}/pdfs/${pdfId}/download/`,
         { responseType: 'arraybuffer' } // Use 'arraybuffer' for binary data handling in React Native
       );
   

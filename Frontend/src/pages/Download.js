@@ -16,7 +16,8 @@ const Download = () => {
         {/* Android */}
         <a
           href="https://drive.google.com/uc?export=download&id=1lPszpovE10_TFEdpZn9Ufbg13sfMSxAz"
-          download
+          target="_blank"
+          rel="noopener noreferrer"
           className="download-card hover:shadow-lg"
         >
           <img

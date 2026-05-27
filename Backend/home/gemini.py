@@ -1,55 +1,123 @@
 import os
+from google import genai
 from dotenv import load_dotenv
-import google.generativeai as genai
 
-# Load .env
 load_dotenv()
 
-# Get API key
-API_KEY = os.getenv("GEMINI_API_KEY")
-
-print("Loaded Key:", API_KEY[:15] if API_KEY else "No API Key")
-
-# Configure Gemini
-genai.configure(api_key=API_KEY)
-
-# Create model
-model = genai.GenerativeModel("gemini-1.5-flash")
+# ==========================
+# Gemini Client
+# ==========================
+client = genai.Client(
+    api_key=os.getenv(
+        "GEMINI_API_KEY"
+    )
+)
 
 
-def generate_legal_response(query, legal_sections):
+def generate_legal_response(
+    query,
+    legal_sections
+):
 
     prompt = f"""
-You are Nyaya AI.
+You are Nyaya AI,
+an Indian legal assistant.
 
-You are an Indian legal assistant.
+IMPORTANT RULES:
 
-STRICT RULES:
-1. Use ONLY the legal information provided.
-2. Never invent IPC/BNS sections.
-3. Explain in simple language.
+1. Answer ONLY
+based on Indian law.
 
-Mention:
-- Crime identified
-- Relevant sections
-- Punishment
+2. Use ONLY
+provided legal context.
+
+3. Never invent
+IPC/BNS sections.
+
+4. If exact section
+is unavailable,
+say:
+"Specific section
+requires legal review."
+
+5. Explain in
+simple language.
+
+6. Mention:
+- Legal issue identified
+- Relevant laws/sections
+- Rights of citizen
+- Punishment (if applicable)
 - FIR guidance
-- Next legal steps
+- Legal next steps
+
+7. If query is about:
+- Constitution →
+Explain articles,
+rights, duties,
+constitutional meaning.
+
+- Judiciary →
+Explain courts,
+appeals, PIL,
+judicial system.
+
+- Legal Process →
+Explain FIR,
+bail, arrest,
+court procedure.
+
+- Cyber Law →
+Explain IT Act,
+fraud prevention,
+cyber complaint.
+
+- Consumer Rights →
+Explain complaint
+process and remedies.
+
+- Women Rights →
+Explain protection laws.
 
 User Query:
 {query}
 
-Legal Information:
+Relevant Legal Context:
 {legal_sections}
 
-Provide response in a structured format.
+Provide structured,
+clear and legally
+responsible response.
 """
 
     try:
-        response = model.generate_content(prompt)
-        print("Gemini Response:", response.text)
-        return response.text
+        response = (
+            client.models
+            .generate_content(
+                model=
+                "gemini-1.5-flash",
+
+                contents=
+                prompt
+            )
+        )
+
+        return (
+            response.text
+            if response.text
+            else
+            "No legal response generated."
+        )
 
     except Exception as e:
-        print("Gemini Error:", e)
-        raise e
+
+        print(
+            "Gemini Error:",
+            str(e)
+        )
+
+        return (
+            "Unable to generate "
+            "legal response "
+            "right now."
+        )

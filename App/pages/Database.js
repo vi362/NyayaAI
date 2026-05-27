@@ -11,21 +11,42 @@ const Database = () => {
 
   const { width } = useWindowDimensions();
   const scrollViewRef = useRef(null);
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     setIsMobile(width < 768);
   }, [width]);
 
   const fetchData = async () => {
-    try {
-      const response = await fetch(''http://127.0.0.1:8000/case_list/'');
-      const data = await response.json();
-      setCases(data.cases || []);
-    } catch (error) {
-      console.error('Error fetching cases:', error);
-      setCases([]);
+  try {
+    const response = await fetch(
+      `${API_BASE}/case_list/`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        'Failed to fetch cases'
+      );
     }
-  };
+
+    const data =
+      await response.json();
+
+    console.log(
+      'Cases:',
+      data
+    );
+
+    setCases(data.cases || []);
+  } catch (error) {
+    console.error(
+      'Error fetching cases:',
+      error
+    );
+
+    setCases([]);
+  }
+};
 
   useEffect(() => {
     fetchData();
@@ -80,6 +101,31 @@ const Database = () => {
       [name]: value,
     }));
   };
+
+const handleRemoveTag = (tagIndex) => {
+  const currentTags = activeCase?.tags
+    ? activeCase.tags
+        .replace(/[\[\]']+/g, '')
+        .split(',')
+    : [];
+
+  const updatedTags = currentTags.filter(
+    (_, index) => index !== tagIndex
+  );
+
+  const updatedTagString =
+    updatedTags.join(', ');
+
+  setEditedCaseData((prev) => ({
+    ...prev,
+    tags: updatedTagString,
+  }));
+
+  setActiveCase((prev) => ({
+    ...prev,
+    tags: updatedTagString,
+  }));
+};
 
   const scrollToTop = () => {
     if (scrollViewRef.current) {
@@ -205,9 +251,17 @@ const Database = () => {
         .map((tag, index) => (
           <View key={index} style={styles.tagItem}>
             <Text style={styles.tagText}>{tag.trim()}</Text>
-            <TouchableOpacity onPress={() => handleRemoveTag(index)}>
-              <Text style={styles.removeTag}>×</Text>
-            </TouchableOpacity>
+            {isEditing && (
+              <TouchableOpacity
+                onPress={() =>
+                  handleRemoveTag(index)
+                }
+              >
+                <Text style={styles.removeTag}>
+                  ×
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         ))
     : <Text>No tags available</Text>}
@@ -414,9 +468,6 @@ const styles = StyleSheet.create({
     borderColor: '#D1D5DB',
     padding: 8,
     marginTop: 4,
-  },
-  boldText: {
-    fontWeight: 'bold',
   },
   tagContainer: {
     flexDirection: 'row',
